@@ -24,15 +24,26 @@ function changeToolbarPosition(position) {
 }
 
 function listPrompts() {
-    // Function to list AI prompts
+    const promptList = document.getElementById('promptList');
+    promptList.innerHTML = '';
+
+    const prompts = getPromptsFromStorage();
+    prompts.forEach(prompt => {
+        const newPrompt = document.createElement('li');
+        newPrompt.innerHTML = `${prompt.title} <span class="category">${prompt.category}</span> <button onclick="insertPrompt('${prompt.text}')">Insert</button> <button onclick="editPrompt(this)">Edit</button> <button onclick="deletePrompt(this)">Delete</button> <button onclick="toggleFavorite(this)">Favorite</button>`;
+        newPrompt.dataset.category = prompt.category;
+        newPrompt.dataset.favorite = prompt.favorite;
+        newPrompt.classList.toggle('favorite', prompt.favorite);
+        promptList.appendChild(newPrompt);
+    });
 }
 
 function searchPrompts() {
     const query = document.getElementById('searchPrompt').value.toLowerCase();
     const prompts = document.querySelectorAll('#promptList li');
     prompts.forEach(prompt => {
-        const text = prompt.textContent.toLowerCase();
-        if (text.includes(query)) {
+        const title = prompt.firstChild.textContent.toLowerCase();
+        if (title.includes(query)) {
             prompt.style.display = '';
         } else {
             prompt.style.display = 'none';
@@ -48,13 +59,12 @@ function addPrompt() {
 function handleAddPromptFormSubmit(event) {
     event.preventDefault();
     const promptTitle = document.getElementById('promptTitle').value;
-    const promptText = document.getElementById('promptText').value;
     const promptCategory = document.getElementById('promptCategory').value;
 
-    if (promptTitle && promptText) {
+    if (promptTitle) {
         const promptList = document.getElementById('promptList');
         const newPrompt = document.createElement('li');
-        newPrompt.innerHTML = `${promptTitle} - ${promptText} <button onclick="insertPrompt('${promptText}')">Insert</button> <button onclick="editPrompt(this)">Edit</button> <button onclick="deletePrompt(this)">Delete</button> <button onclick="toggleFavorite(this)">Favorite</button>`;
+        newPrompt.innerHTML = `${promptTitle} <span class="category">${promptCategory}</span> <button onclick="insertPrompt('${promptTitle}')">Insert</button> <button onclick="editPrompt(this)">Edit</button> <button onclick="deletePrompt(this)">Delete</button> <button onclick="toggleFavorite(this)">Favorite</button>`;
         newPrompt.dataset.category = promptCategory;
         newPrompt.dataset.favorite = 'false';
         promptList.appendChild(newPrompt);
@@ -70,22 +80,20 @@ function closeAddPromptModal() {
 
 function editPrompt(button) {
     const promptItem = button.parentElement;
-    const promptTitle = promptItem.firstChild.textContent.split(' - ')[0];
-    const promptText = promptItem.firstChild.textContent.split(' - ')[1];
+    const promptTitle = promptItem.firstChild.textContent;
     const promptCategory = promptItem.dataset.category;
 
     const addPromptModal = document.getElementById('addPromptModal');
     addPromptModal.style.display = 'block';
 
     document.getElementById('promptTitle').value = promptTitle;
-    document.getElementById('promptText').value = promptText;
     document.getElementById('promptCategory').value = promptCategory;
 
     const addPromptForm = document.getElementById('addPromptForm');
     addPromptForm.removeEventListener('submit', handleAddPromptFormSubmit);
     addPromptForm.addEventListener('submit', function updatePrompt(event) {
         event.preventDefault();
-        promptItem.innerHTML = `${promptTitle} - ${promptText} <button onclick="insertPrompt('${promptText}')">Insert</button> <button onclick="editPrompt(this)">Edit</button> <button onclick="deletePrompt(this)">Delete</button> <button onclick="toggleFavorite(this)">Favorite</button>`;
+        promptItem.innerHTML = `${promptTitle} <span class="category">${promptCategory}</span> <button onclick="insertPrompt('${promptTitle}')">Insert</button> <button onclick="editPrompt(this)">Edit</button> <button onclick="deletePrompt(this)">Delete</button> <button onclick="toggleFavorite(this)">Favorite</button>`;
         promptItem.dataset.category = document.getElementById('promptCategory').value;
         closeAddPromptModal();
         addPromptForm.removeEventListener('submit', updatePrompt);
@@ -129,8 +137,7 @@ function exportPrompts() {
     const prompts = [];
     document.querySelectorAll('#promptList li').forEach(prompt => {
         prompts.push({
-            title: prompt.firstChild.textContent.split(' - ')[0],
-            text: prompt.firstChild.textContent.split(' - ')[1],
+            title: prompt.firstChild.textContent,
             category: prompt.dataset.category,
             favorite: prompt.dataset.favorite === 'true'
         });
@@ -157,7 +164,7 @@ function importPrompts() {
             promptList.innerHTML = '';
             prompts.forEach(prompt => {
                 const newPrompt = document.createElement('li');
-                newPrompt.innerHTML = `${prompt.title} - ${prompt.text} <button onclick="insertPrompt('${prompt.text}')">Insert</button> <button onclick="editPrompt(this)">Edit</button> <button onclick="deletePrompt(this)">Delete</button> <button onclick="toggleFavorite(this)">Favorite</button>`;
+                newPrompt.innerHTML = `${prompt.title} <span class="category">${prompt.category}</span> <button onclick="insertPrompt('${prompt.title}')">Insert</button> <button onclick="editPrompt(this)">Edit</button> <button onclick="deletePrompt(this)">Delete</button> <button onclick="toggleFavorite(this)">Favorite</button>`;
                 newPrompt.dataset.category = prompt.category;
                 newPrompt.dataset.favorite = prompt.favorite;
                 newPrompt.classList.toggle('favorite', prompt.favorite);
@@ -167,4 +174,48 @@ function importPrompts() {
         reader.readAsText(file);
     });
     input.click();
+}
+
+function filterPromptsByCategory() {
+    const selectedCategory = document.getElementById('categoryFilter').value;
+    const prompts = document.querySelectorAll('#promptList li');
+    prompts.forEach(prompt => {
+        if (selectedCategory === '' || prompt.dataset.category === selectedCategory) {
+            prompt.style.display = '';
+        } else {
+            prompt.style.display = 'none';
+        }
+    });
+}
+
+function sortPrompts() {
+    const sortOption = document.getElementById('sortPrompts').value;
+    const promptList = document.getElementById('promptList');
+    const prompts = Array.from(promptList.children);
+
+    prompts.sort((a, b) => {
+        if (sortOption === 'title') {
+            return a.firstChild.textContent.localeCompare(b.firstChild.textContent);
+        } else if (sortOption === 'category') {
+            return a.dataset.category.localeCompare(b.dataset.category);
+        } else if (sortOption === 'date') {
+            return new Date(a.dataset.date) - new Date(b.dataset.date);
+        }
+    });
+
+    promptList.innerHTML = '';
+    prompts.forEach(prompt => promptList.appendChild(prompt));
+}
+
+function prevPage() {
+    // Implement pagination logic for previous page
+}
+
+function nextPage() {
+    // Implement pagination logic for next page
+}
+
+function getPromptsFromStorage() {
+    // Retrieve prompts from local storage or other storage mechanism
+    return [];
 }

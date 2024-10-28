@@ -244,3 +244,45 @@ textarea:focus {
 .pagination button:hover {
     background-color: #0056b3;
 }
+
+/* Styles for displaying the category of each prompt next to the title */
+.toolbar-content ul li .category {
+    font-size: 0.9em;
+    color: #888;
+    margin-left: 10px;
+}
+
+/* Styles for sorting options in the toolbar */
+.sorting-options {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.sorting-options select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+/* Highlight prompts from the selected category to make them stand out */
+.selected-category {
+    background-color: #e0f7fa;
+}
+
+/* Ensure the prompt list is responsive and looks good on different screen sizes */
+@media (max-width: 600px) {
+    .toolbar {
+        width: 100%;
+    }
+
+    .toolbar-content ul li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .toolbar-content ul li .category {
+        margin-left: 0;
+        margin-top: 5px;
+    }
+}

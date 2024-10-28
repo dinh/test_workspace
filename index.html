@@ -15,7 +15,24 @@
         </div>
         <div class="toolbar-content">
             <input type="text" id="searchPrompt" placeholder="Search prompts...">
+            <select id="categoryFilter" onchange="filterPromptsByCategory()">
+                <option value="">All Categories</option>
+                <!-- Categories will be dynamically populated -->
+            </select>
             <ul id="promptList"></ul>
+            <div class="pagination">
+                <button onclick="prevPage()">Previous</button>
+                <span id="pageInfo"></span>
+                <button onclick="nextPage()">Next</button>
+            </div>
+            <div class="sorting-options">
+                <label for="sortPrompts">Sort by:</label>
+                <select id="sortPrompts" onchange="sortPrompts()">
+                    <option value="title">Title</option>
+                    <option value="category">Category</option>
+                    <option value="date">Date Added</option>
+                </select>
+            </div>
             <button onclick="addPrompt()">Add Prompt</button>
             <button onclick="exportPrompts()">Export Prompts</button>
             <button onclick="importPrompts()">Import Prompts</button>
