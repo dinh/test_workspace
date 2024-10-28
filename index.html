@@ -17,9 +17,41 @@
             <input type="text" id="searchPrompt" placeholder="Search prompts...">
             <ul id="promptList"></ul>
             <button onclick="addPrompt()">Add Prompt</button>
+            <button onclick="exportPrompts()">Export Prompts</button>
+            <button onclick="importPrompts()">Import Prompts</button>
         </div>
     </div>
     <div class="contenteditable" contenteditable="true"></div>
+
+    <!-- Custom Modal Dialog for Adding Prompts -->
+    <div id="addPromptModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddPromptModal()">&times;</span>
+            <h2>Add Prompt</h2>
+            <form id="addPromptForm">
+                <label for="promptTitle">Title:</label>
+                <input type="text" id="promptTitle" name="promptTitle" required>
+                <label for="promptText">Text:</label>
+                <textarea id="promptText" name="promptText" required></textarea>
+                <label for="promptCategory">Category:</label>
+                <input type="text" id="promptCategory" name="promptCategory">
+                <button type="submit">Add</button>
+                <button type="button" onclick="closeAddPromptModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Dialog for Deletions -->
+    <div id="deletePromptModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDeletePromptModal()">&times;</span>
+            <h2>Confirm Deletion</h2>
+            <p>Are you sure you want to delete this prompt?</p>
+            <button id="confirmDeleteButton">Delete</button>
+            <button type="button" onclick="closeDeletePromptModal()">Cancel</button>
+        </div>
+    </div>
+
     <script src="toolbar.js"></script>
 </body>
 </html>

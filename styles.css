@@ -109,3 +109,138 @@ body {
     border-radius: 3px;
     min-height: 100px;
 }
+
+/* Custom Modal Dialog for Adding Prompts */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 5px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content form label {
+    margin-bottom: 5px;
+}
+
+.modal-content form input,
+.modal-content form textarea {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.modal-content form button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.modal-content form button:hover {
+    background-color: #218838;
+}
+
+/* Confirmation Dialog for Deletions */
+#deletePromptModal .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 5px;
+}
+
+#deletePromptModal .modal-content h2 {
+    margin-top: 0;
+}
+
+#deletePromptModal .modal-content p {
+    margin-bottom: 20px;
+}
+
+#deletePromptModal .modal-content button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+#deletePromptModal .modal-content button:hover {
+    background-color: #c82333;
+}
+
+/* CSS class to visually indicate a favorite prompt */
+.favorite {
+    background-color: #fff3cd;
+}
+
+/* Focus styles for improved accessibility */
+button:focus,
+input:focus,
+textarea:focus {
+    outline: 2px solid #0056b3;
+    outline-offset: 2px;
+}
+
+/* Styles for pagination controls */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.pagination button:hover {
+    background-color: #0056b3;
+}
